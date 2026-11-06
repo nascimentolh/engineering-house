@@ -98,8 +98,11 @@ A estrutura, o build e os testes vindos da Fase 1, mais os artefatos da casa do 
 O **`.claude/settings.json` sai da receita da stack** (`templates/settings/`), confirmada contra o que as
 Fases 0 e 1 mostraram. **Copiar os padrões de outra stack é erro:** eles nunca vão casar com nada lá, e
 **deny que não casa é deny que não existe**. Se a stack não tem receita em `templates/settings/`, o prompt
-manda **montar uma do zero a partir dos riscos reais** dela, e cada entrada nasce com o par de isca e
-controle escrito ao lado.
+manda invocar a skill `engineering-house:permission-settings` e seguir a seção **"Stack sem receita"**: ela
+monta a partir dos riscos reais daquela stack, cada entrada nasce com o par de isca e controle ao lado, os
+pares se executam, e no fim **ela oferece devolver a receita ao plugin por PR** — porque sem isso o próximo
+projeto da mesma stack paga o trabalho de novo. O prompt gerado diz isso explicitamente, e diz também que
+**quem abre o PR é o dono, nunca a sessão**.
 
 ### Fase 3 — Aprovação. PARA.
 

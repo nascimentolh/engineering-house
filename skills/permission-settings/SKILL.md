@@ -1,6 +1,6 @@
 ---
 name: permission-settings
-description: Use ao criar ou alterar qualquer entrada de permissão no `.claude/settings.json` (deny/ask/allow), ao investigar por que uma regra de permissão não pegou, quando a sessão parece não estar respeitando o settings do projeto, ou quando uma escrita foi recusada (hook, classificador ou ferramenta de arquivo).
+description: Use ao criar ou alterar qualquer entrada de permissão no `.claude/settings.json` (deny/ask/allow), ao montar o `settings.json` de um projeto cuja stack NÃO tem receita pronta em templates/settings/, ao investigar por que uma regra de permissão não pegou, quando a sessão parece não estar respeitando o settings do projeto, ou quando uma escrita foi recusada (hook, classificador ou ferramenta de arquivo).
 ---
 
 # Entrada de permissão só existe depois de testada
@@ -113,3 +113,61 @@ passa) e o `cp` do dono o põe no lugar.
    o dono tinha tirado volta. Depois de um descarte, **assuma que o hook voltou ao original**.
 3. **Pular o prompt de permissão não serve** — a flag que ignora confirmação não vence hook nem
    classificador.
+
+## Stack sem receita: monte, prove, e devolva para a casa
+
+**Primeiro confira se já existe.** Liste `${CLAUDE_PLUGIN_ROOT}/templates/settings/` e procure a família de
+risco desta stack. `_base-git.md` soma a todas; algumas somam entre si (`android.md` soma ao
+`jvm-gradle.md`). Reusar uma receita provada é sempre melhor que escrever outra.
+
+**Não achou?** Então monte a partir dos **riscos reais desta stack** — não copie os padrões de outra, porque
+eles nunca vão casar com nada aqui, e **deny que não casa é deny que não existe**. Três perguntas dão a
+lista inteira:
+
+- **O que, nesta stack, é destrutivo e irreversível?** Normalmente: o histórico versionado do schema (ele
+  tem um nome diferente em cada stack e é sempre a coisa mais fácil de apagar "para regerar limpo"), o
+  material de assinatura e os segredos em arquivo, o lockfile, o que publica para fora, e o que apaga dado
+  que não está em git nenhum — volume, banco local, dado no aparelho. → `deny`
+- **O que é irreversível mas legítimo no dia a dia?** → `ask`
+- **O que só gera confirmação inútil?** → `allow`
+
+**Cada entrada nasce com o par escrito ao lado dela, e o par se EXECUTA.** Até isso acontecer você tem um
+rascunho, não uma receita. A isca tem de ser inócua se o `deny` falhar, e a prova é a mensagem de negação.
+
+### Então ofereça o PR — e a oferta é obrigatória
+
+Depois que os pares passaram, **diga a quem pediu, em uma linha, que esta receita pode voltar para o
+`engineering-house`** e pergunte se ele quer. Duas razões, e as duas são dele:
+
+- A receita custou trabalho real. Sem ela no plugin, **o próximo projeto desta stack paga o mesmo preço** —
+  e quem paga é ele.
+- Receita volta **por PR, nunca por commit direto**, inclusive para o dono do repositório. Uma receita
+  errada no plugin não quebra um projeto: quebra **todos** os que a instalarem. O PR é onde isso é revisado
+  antes de virar verdade para outras pessoas. A régua da revisão está em
+  `${CLAUDE_PLUGIN_ROOT}/CONTRIBUTING.md`.
+
+**Se ele disser sim, você monta e PARA.** Monte o arquivo `templates/settings/<stack>.md` no formato das
+outras (bloco `json` + tabela de pares) e entregue **os comandos prontos para ele rodar com `!`**:
+
+```
+gh repo view --json nameWithOwner,viewerPermission -q '.nameWithOwner, .viewerPermission'
+```
+↑ rode isto **dentro** de `${CLAUDE_PLUGIN_ROOT}` primeiro: ele diz se quem está rodando pode abrir branch
+direto ou precisa de fork. Se `${CLAUDE_PLUGIN_ROOT}` não for um clone git (o plugin pode estar num cache),
+o caminho é clonar o repositório à parte e montar o branch lá.
+
+```
+git -C <clone> switch -c receita-<stack> && git -C <clone> add templates/settings/<stack>.md && git -C <clone> commit
+gh pr create --repo <dono>/engineering-house --fill
+```
+
+⚠️ **Você NUNCA dá `push` nem abre o PR.** É o mesmo contrato da `sibling-spec`, pela mesma razão: publicar
+é decisão de quem responde pela conta, e o repositório de destino não é governado por esta sessão. **O
+prompt atravessa a fronteira; a mão, não.**
+
+⚠️ **E o corpo do PR leva a prova, não a promessa:** para cada par, o resultado e **a mensagem de negação**.
+Sem isso o revisor não tem o que revisar, e um PR não revisável é pior que receita ausente — ele parece
+coberto.
+
+**Se ele disser não:** siga em frente e não deixe rastro. A receita fica no `settings.json` e no
+`PERMISSIONS.md` daquele projeto, que é onde ela já serve.

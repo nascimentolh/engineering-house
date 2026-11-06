@@ -115,6 +115,16 @@ no `PERMISSIONS.md` dele.
 tabelas trazem o par já escrito; **executá-lo é parte de adotar a receita**, e a skill
 `engineering-house:permission-settings` conduz isso.
 
+### Sua stack não está na lista?
+
+A skill `engineering-house:permission-settings` monta a receita a partir dos riscos reais dela, executa os
+pares, e **oferece devolvê-la para cá por pull request** — sem isso, o próximo projeto da mesma stack paga
+o mesmo trabalho. **Toda receita entra por PR, inclusive as do dono**, porque uma receita errada aqui não
+quebra um projeto: quebra todos os que a instalarem. A régua da revisão e o que o PR tem de trazer estão em
+**[CONTRIBUTING.md](./CONTRIBUTING.md)**.
+
+Nenhuma sessão de Claude dá `push` nem abre o PR por você: ela monta o branch e devolve o comando.
+
 ## Atualizar
 
 Um plugin que vem de um marketplace de **caminho local** é lido **no lugar**. Então:
