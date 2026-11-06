@@ -1,0 +1,9 @@
+{
+  "name": "engineering-house",
+  "version": "0.1.0",
+  "description": "A forma de trabalho de uma casa, instalavel em qualquer projeto de qualquer stack: cinco principios, os workflows que os fazem acontecer e as receitas para materializa-los.",
+  "author": {
+    "name": "Luiz Nascimento"
+  },
+  "keywords": ["workflow", "spec", "permissions", "bootstrap", "governance"]
+}

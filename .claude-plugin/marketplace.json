@@ -1,0 +1,15 @@
+{
+  "name": "engineering-house",
+  "description": "Marketplace local do engineering-house.",
+  "owner": {
+    "name": "Luiz Nascimento"
+  },
+  "plugins": [
+    {
+      "name": "engineering-house",
+      "source": "./",
+      "description": "Cinco principios stack-agnosticos, os workflows que os fazem acontecer (spec, handoff, new-rule, sibling-spec, new-project, permission-settings) e as receitas para materializa-los num projeto concreto.",
+      "category": "workflow"
+    }
+  ]
+}
